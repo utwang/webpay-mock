@@ -23,6 +23,15 @@ module WebPay::Mock::FakeEntity
     Account.new.override(overrides).build
   end
 
+  def fake_list(path, proc)
+    {
+      'object' => 'list',
+      'url' => '/v1' + path,
+      'count' => 3,
+      'data' => [proc.call, proc.call, proc.call]
+    }
+  end
+
   def card_from(params, overrides = {})
     Card.new.set_params(params).override(overrides).build
   end
