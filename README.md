@@ -51,4 +51,4 @@ See [our test cases](https://github.com/tomykaira/webpay-mock/blob/master/spec/w
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-Fixed bugs and New features must be tested.
+Fixed bugs and new features must be tested.
