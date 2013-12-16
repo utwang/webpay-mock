@@ -1,5 +1,5 @@
 module WebPay::Mock::FakeError
-  include Util
+  include WebPay::Mock::Util
 
   def card_error(attributes = {})
     {
