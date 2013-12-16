@@ -1,6 +1,8 @@
 # WebPay::Mock
 
-TODO: Write a gem description
+WebPay::Mock helps development of WebPay client applications.
+
+This generates a response object from request parameters, and wraps WebMock gem for easy end-to-end testing against webpay API server.
 
 ## Installation
 
@@ -18,7 +20,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### RSpec
+
+In `spec_helper.rb`,
+
+```ruby
+require 'webpay-mock'
+
+RSpec.configure do |c|
+  c.include WebPay::Mock::WebMockWrapper
+end
+```
+
+In your spec file,
+
+```ruby
+let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
+let!(:response) { webpay_stub(:charges, :create, params: params) }
+
+specify { expect(WebPay::Charge.create(params).id).to eq response['id'] }
+```
+
+See [our test cases](https://github.com/tomykaira/webpay-mock/blob/master/spec/webmock_wrapper_spec.rb) for more examples.
 
 ## Contributing
 
@@ -27,3 +50,5 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Fixed bugs and New features must be tested.
