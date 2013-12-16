@@ -1,4 +1,4 @@
-class Webpay::Mock::Builder
+class WebPay::Mock::Builder
   include Util
   PREFIX = {
     charge: 'ch',

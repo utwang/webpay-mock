@@ -1,6 +1,6 @@
 require 'securerandom'
 
-module Webpay::Mock::FakeEntity
+module WebPay::Mock::FakeEntity
   include Util
 
   def customer_from(params, overrides = {})

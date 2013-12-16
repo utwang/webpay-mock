@@ -1,4 +1,4 @@
-module Webpay::Mock::FakeError
+module WebPay::Mock::FakeError
   include Util
 
   def card_error(attributes = {})

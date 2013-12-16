@@ -5,7 +5,7 @@ require 'webpay/mock/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "webpay-mock"
-  spec.version       = Webpay::Mock::VERSION
+  spec.version       = WebPay::Mock::VERSION
   spec.authors       = ["webpay", "tomykaira"]
   spec.email         = ['administrators@webpay.jp', 'tomykaira@webpay.jp']
   spec.description   = 'WebPay::Mock helps development of WebPay client applications'

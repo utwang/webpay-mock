@@ -1,4 +1,4 @@
-# Webpay::Mock
+# WebPay::Mock
 
 TODO: Write a gem description
 
