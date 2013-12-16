@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - jruby-head
+  - rbx-2.1.1
+script: "bundle exec rake"
+notifications:
+  hipchat:
+    rooms:
+      secure: ykLsXlebzR9nnb+9ttpCySOg2hE4Ve699s2Owd7YahcZyVNxnG4q1P8Mps4jFlOgPNQ6JwkcB4A6QLavavtJlX7vXTDj1GD+zVAScjbtN/6ZV94S2eHA7hBUXHUwBmH0Cw5glrFoPEDBsQdOYbrOrJKwFNEhUTHdY0SRgEXv5Wo=
