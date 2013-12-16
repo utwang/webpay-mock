@@ -4,9 +4,10 @@ class WebPay::Mock::FakeEntity::Base
 
   attr_reader :builder
 
-  def initialize
+  def initialize(base = {})
     @builder = WebPay::Mock::Builder.new(object_name)
       .set_from(basic_attributes)
+      .set_from(base)
   end
 
   def set_params(params = {})

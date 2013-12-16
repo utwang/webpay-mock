@@ -72,4 +72,18 @@ describe WebPay::Mock::FakeEntity::Charge do
     specify { expect(charge['paid']).to eq false }
     specify { expect(charge['expire_time']).to be_within(2).of(Time.now.to_i + 60 * 60 * 24 * 7) }
   end
+
+  context 'base' do
+    it 'should be used as the default' do
+      expect(charge_from({}, {}, {'amount' => 300})['amount']).to eq 300
+    end
+
+    it 'should be weaker than params' do
+      expect(charge_from({amount: 500}, {}, { 'amount' => 300})['amount']).to eq 500
+    end
+
+    it 'should be weaker than overrides' do
+      expect(charge_from({amount: 500}, {amount: 999}, { 'amount' => 300})['amount']).to eq 999
+    end
+  end
 end

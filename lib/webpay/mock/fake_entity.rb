@@ -3,12 +3,12 @@ require 'securerandom'
 module WebPay::Mock::FakeEntity
   include WebPay::Mock::Util
 
-  def customer_from(params, overrides = {})
-    Customer.new.set_params(params).override(overrides).build
+  def customer_from(params, overrides = {}, base = {})
+    Customer.new(base).set_params(params).override(overrides).build
   end
 
-  def charge_from(params, overrides = {})
-    Charge.new.set_params(params).override(overrides).build
+  def charge_from(params, overrides = {}, base = {})
+    Charge.new(base).set_params(params).override(overrides).build
   end
 
   def token_from(params, overrides = {})
