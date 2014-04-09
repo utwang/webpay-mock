@@ -52,3 +52,9 @@ See [our test cases](https://github.com/tomykaira/webpay-mock/blob/master/spec/w
 5. Create new Pull Request
 
 Fixed bugs and new features must be tested.
+
+## License
+
+[The MIT License (MIT)](http://opensource.org/licenses/mit-license.html)
+
+Copyright (c) 2013- WebPay, Inc.
