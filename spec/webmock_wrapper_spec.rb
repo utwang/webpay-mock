@@ -84,6 +84,42 @@ describe WebPay::Mock::WebMockWrapper do
     end
   end
 
+  describe 'recursios' do
+    describe 'create' do
+      let!(:response) { webpay_stub(:recursion, :create, params: {}) }
+      specify { expect(WebPay::Recursion.create({}).id).to eq response['id'] }
+    end
+
+    describe 'retrieve' do
+      let(:id) { 'rec_xxxxxxxxx' }
+      before { webpay_stub(:recursions, :retrieve, id: id) }
+      specify { expect(WebPay::Recursion.retrieve(id).id).to eq id }
+    end
+
+    describe 'resume' do
+      let(:id) { 'rec_xxxxxxxxx' }
+      let!(:retrieved) { webpay_stub(:recursions, :retrieve, id: id, overrides: { status: 'suspended' }) }
+      let!(:resumed) { webpay_stub(:recursions, :resume, base: retrieved) }
+      specify { expect(WebPay::Recursion.retrieve(id).status).to eq 'suspended' }
+      specify { expect(WebPay::Recursion.retrieve(id).resume.status).to eq 'active' }
+    end
+
+    describe 'delete' do
+      let(:id) { 'rec_xxxxxxxxx' }
+      let!(:retrieved) { webpay_stub(:recursions, :retrieve, id: id) }
+      let!(:updated) { webpay_stub(:recursions, :delete, id: id) }
+      specify do
+        recursion = WebPay::Recursion.retrieve(id)
+        expect(recursion.delete).to eq true
+      end
+    end
+
+    describe 'all' do
+      before { webpay_stub(:recursions, :all) }
+      specify { expect(WebPay::Recursion.all.count).to eq 3 }
+    end
+  end
+
   describe 'token' do
     describe 'create' do
       let(:card_params) { {:number=>"4242-4242-4242-4242",

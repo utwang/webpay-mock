@@ -58,6 +58,19 @@ module WebPay::Mock::WebMockWrapper
         when :all
           [:get, '/customers', fake_list('/customers', lambda { customer_from({}, overrides) })]
         end
+      when :recursion, :recursions
+        case action.to_sym
+        when :create
+          [:post, '/recursions', recursion_from(params, overrides)]
+        when :retrieve
+          [:get, '/recursions/:id', recursion_from({}, { id: id }.merge(overrides))]
+        when :resume
+          [:post, '/recursions/:id/resume', recursion_from({}, { id: id, status: 'active' }.merge(overrides), base)]
+        when :delete
+          [:delete, '/recursions/:id', { 'id' => id, 'deleted' => true }]
+        when :all
+          [:get, '/recursions', fake_list('/recursions', lambda { recursion_from({}, overrides) })]
+        end
       when :token, :tokens
         case action.to_sym
         when :create
