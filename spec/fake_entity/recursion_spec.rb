@@ -15,7 +15,7 @@ describe WebPay::Mock::FakeEntity::Recursion do
     specify { expect(recursion['period']).to eq 'month' }
     specify { expect(recursion['customer']).to eq 'cus_XXXXXXXXX' }
     specify { expect(recursion['last_executed']).to eq nil }
-    specify { expect(recursion['next_executed']).to be_within(2).of(Time.now.to_i) }
+    specify { expect(recursion['next_scheduled']).to be_within(2).of(Time.now.to_i) }
     specify { expect(recursion['status']).to eq 'active' }
   end
 
@@ -45,7 +45,7 @@ describe WebPay::Mock::FakeEntity::Recursion do
       let(:first_scheduled) { Time.now.to_i + 60 * 60 * 24 * 10 }
 
       specify { expect(recursion['last_executed']).to eq nil }
-      specify { expect(recursion['next_executed']).to eq(first_scheduled) }
+      specify { expect(recursion['next_scheduled']).to eq(first_scheduled) }
     end
 
     context 'params has period no first_scheduled' do
@@ -53,7 +53,7 @@ describe WebPay::Mock::FakeEntity::Recursion do
       let(:first_scheduled) { nil }
 
       specify { expect(recursion['last_executed']).to eq nil }
-      specify { expect(recursion['next_executed']).to be_within(2).of(Time.now.to_i) }
+      specify { expect(recursion['next_scheduled']).to be_within(2).of(Time.now.to_i) }
     end
 
     context 'params has first_scheduled no period ' do
@@ -61,7 +61,7 @@ describe WebPay::Mock::FakeEntity::Recursion do
       let(:first_scheduled) { Time.now.to_i + 60 * 60 * 24 * 10 }
 
       specify { expect(recursion['last_executed']).to eq nil }
-      specify { expect(recursion['next_executed']).to be_within(2).of(first_scheduled) }
+      specify { expect(recursion['next_scheduled']).to be_within(2).of(first_scheduled) }
     end
   end
 end
