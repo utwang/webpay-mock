@@ -86,7 +86,8 @@ describe WebPay::Mock::WebMockWrapper do
 
   describe 'recursios' do
     describe 'create' do
-      let!(:response) { webpay_stub(:recursion, :create, params: {}) }
+      let(:params) { { amount: 1000, currency: 'jpy', customer: 'cus_xxxxxxxxx', period: 'month', description: 'test charge' } }
+      let!(:response) { webpay_stub(:recursion, :create, params: params) }
       specify { expect(WebPay::Recursion.create({}).id).to eq response['id'] }
     end
 
