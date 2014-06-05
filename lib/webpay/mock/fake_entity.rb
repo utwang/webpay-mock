@@ -3,12 +3,16 @@ require 'securerandom'
 module WebPay::Mock::FakeEntity
   include WebPay::Mock::Util
 
+  def charge_from(params, overrides = {}, base = {})
+    Charge.new(base).set_params(params).override(overrides).build
+  end
+
   def customer_from(params, overrides = {}, base = {})
     Customer.new(base).set_params(params).override(overrides).build
   end
 
-  def charge_from(params, overrides = {}, base = {})
-    Charge.new(base).set_params(params).override(overrides).build
+  def recursion_from(params, overrides = {}, base = {})
+    Recursion.new(base).set_params(params).override(overrides).build
   end
 
   def token_from(params, overrides = {})
@@ -49,6 +53,7 @@ require 'webpay/mock/fake_entity/base'
 require 'webpay/mock/fake_entity/card'
 require 'webpay/mock/fake_entity/charge'
 require 'webpay/mock/fake_entity/customer'
+require 'webpay/mock/fake_entity/recursion'
 require 'webpay/mock/fake_entity/token'
 require 'webpay/mock/fake_entity/event'
 require 'webpay/mock/fake_entity/account'

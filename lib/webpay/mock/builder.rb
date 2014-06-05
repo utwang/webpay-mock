@@ -3,6 +3,7 @@ class WebPay::Mock::Builder
   PREFIX = {
     charge: 'ch',
     customer: 'cus',
+    recursion: 'rec',
     token: 'tok',
     event: 'evt',
     account: 'acct'
