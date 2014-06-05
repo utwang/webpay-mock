@@ -17,7 +17,7 @@ module WebPay::Mock::FakeEntity
     end
 
     def copy_attributes
-      [:amount, :currency, :customer, :description]
+      [:amount, :currency, :customer, :description, :period]
     end
 
     def conversion(key, value)
