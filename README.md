@@ -25,7 +25,7 @@ Or install it yourself as:
 In `spec_helper.rb`,
 
 ```ruby
-require 'webpay-mock'
+require 'webpay/mock'
 
 RSpec.configure do |c|
   c.include WebPay::Mock::WebMockWrapper
