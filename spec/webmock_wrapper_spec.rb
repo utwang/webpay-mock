@@ -8,79 +8,74 @@ describe WebPay::Mock::WebMockWrapper do
   #       c.include WebPay::Mock::WebMockWrapper
   #     end
   include WebPay::Mock::WebMockWrapper
+  let(:webpay) { WebPay.new('test_secret_xxxxxx') }
 
   describe 'charges' do
     describe 'create' do
       let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
       let!(:response) { webpay_stub(:charges, :create, params: params) }
 
-      specify { expect(WebPay::Charge.create(params).id).to eq response['id'] }
+      specify { expect(webpay.charge.create(params).id).to eq response['id'] }
     end
 
     describe 'retrieve' do
       let(:id) { 'ch_xxxxxxxxx' }
       before { webpay_stub(:charges, :retrieve, id: id) }
-      specify { expect(WebPay::Charge.retrieve(id).id).to eq id }
+      specify { expect(webpay.charge.retrieve(id).id).to eq id }
     end
 
     describe 'refund' do
       let(:id) { 'ch_xxxxxxxxx' }
-      let!(:retrieved) { webpay_stub(:charges, :retrieve, id: id) }
-      let!(:refunded) { webpay_stub(:charges, :refund, params: { 'amount' => retrieved['amount'] }, base: retrieved) }
-      specify { expect(WebPay::Charge.retrieve(id).refund.refunded).to eq true }
+      let(:data) { charge_from({amount: 5000}, id: id) }
+      let!(:refunded) { webpay_stub(:charges, :refund, params: { 'amount' => data['amount'] }, base: data) }
+      specify { expect(webpay.charge.refund(id).refunded).to eq true }
     end
 
     describe 'capture' do
       let(:id) { 'ch_xxxxxxxxx' }
-      let!(:retrieved) { webpay_stub(:charges, :retrieve, id: id, overrides: { captured: false } ) }
-      let!(:captured) { webpay_stub(:charges, :capture, base: retrieved) }
-      specify { expect(WebPay::Charge.retrieve(id).captured).to eq false }
-      specify { expect(WebPay::Charge.retrieve(id).capture.captured).to eq true }
+      let!(:captured) { webpay_stub(:charges, :capture, params: { id: id }) }
+      specify { expect(webpay.charge.capture(id).captured).to eq true }
     end
 
     describe 'all' do
       before { webpay_stub(:charges, :all) }
-      specify { expect(WebPay::Charge.all.count).to eq 3 }
+      specify { expect(webpay.charge.all.count).to eq 3 }
     end
   end
 
   describe 'customers' do
     describe 'create' do
       let!(:response) { webpay_stub(:customers, :create, params: {}) }
-      specify { expect(WebPay::Customer.create({}).id).to eq response['id'] }
+      specify { expect(webpay.customer.create({}).id).to eq response['id'] }
     end
 
     describe 'retrieve' do
       let(:id) { 'cus_xxxxxxxxx' }
       before { webpay_stub(:customers, :retrieve, id: id) }
-      specify { expect(WebPay::Customer.retrieve(id).id).to eq id }
+      specify { expect(webpay.customer.retrieve(id).id).to eq id }
     end
 
     describe 'update' do
       let(:id) { 'cus_xxxxxxxxx' }
-      let!(:retrieved) { webpay_stub(:customers, :retrieve, id: id) }
-      let!(:updated) { webpay_stub(:customers, :update, params: { 'email' => 'new@example.com' }, base: retrieved) }
+      let!(:updated) { webpay_stub(:customers, :update, params: { 'email' => 'new@example.com', 'id' => id }) }
       specify do
-        customer = WebPay::Customer.retrieve(id)
-        customer.email = 'new@example.com'
-        customer.save
-        expect(customer.email).to eq 'new@example.com'
+        response = webpay.customer.update(id: id, email: 'new@example.com')
+        expect(response.email).to eq 'new@example.com'
       end
     end
 
     describe 'delete' do
       let(:id) { 'cus_xxxxxxxxx' }
-      let!(:retrieved) { webpay_stub(:customers, :retrieve, id: id) }
       let!(:updated) { webpay_stub(:customers, :delete, id: id) }
       specify do
-        customer = WebPay::Customer.retrieve(id)
-        expect(customer.delete).to eq true
+        customer = webpay.customer.delete(id)
+        expect(customer.deleted).to eq true
       end
     end
 
     describe 'all' do
       before { webpay_stub(:customers, :all) }
-      specify { expect(WebPay::Customer.all.count).to eq 3 }
+      specify { expect(webpay.customer.all.count).to eq 3 }
     end
   end
 
@@ -88,36 +83,35 @@ describe WebPay::Mock::WebMockWrapper do
     describe 'create' do
       let(:params) { { amount: 1000, currency: 'jpy', customer: 'cus_xxxxxxxxx', period: 'month', description: 'test charge' } }
       let!(:response) { webpay_stub(:recursion, :create, params: params) }
-      specify { expect(WebPay::Recursion.create({}).id).to eq response['id'] }
+      specify { expect(webpay.recursion.create({}).id).to eq response['id'] }
     end
 
     describe 'retrieve' do
       let(:id) { 'rec_xxxxxxxxx' }
       before { webpay_stub(:recursions, :retrieve, id: id) }
-      specify { expect(WebPay::Recursion.retrieve(id).id).to eq id }
+      specify { expect(webpay.recursion.retrieve(id).id).to eq id }
     end
 
     describe 'resume' do
       let(:id) { 'rec_xxxxxxxxx' }
       let!(:retrieved) { webpay_stub(:recursions, :retrieve, id: id, overrides: { status: 'suspended' }) }
       let!(:resumed) { webpay_stub(:recursions, :resume, base: retrieved) }
-      specify { expect(WebPay::Recursion.retrieve(id).status).to eq 'suspended' }
-      specify { expect(WebPay::Recursion.retrieve(id).resume.status).to eq 'active' }
+      specify { expect(webpay.recursion.retrieve(id).status).to eq 'suspended' }
+      specify { expect(webpay.recursion.resume(id).status).to eq 'active' }
     end
 
     describe 'delete' do
       let(:id) { 'rec_xxxxxxxxx' }
-      let!(:retrieved) { webpay_stub(:recursions, :retrieve, id: id) }
       let!(:updated) { webpay_stub(:recursions, :delete, id: id) }
       specify do
-        recursion = WebPay::Recursion.retrieve(id)
-        expect(recursion.delete).to eq true
+        recursion = webpay.recursion.delete(id)
+        expect(recursion.deleted).to eq true
       end
     end
 
     describe 'all' do
       before { webpay_stub(:recursions, :all) }
-      specify { expect(WebPay::Recursion.all.count).to eq 3 }
+      specify { expect(webpay.recursion.all.count).to eq 3 }
     end
   end
 
@@ -129,13 +123,13 @@ describe WebPay::Mock::WebMockWrapper do
           :cvc=>"123",
           :name=>"KIYOKI IPPYO"} }
       let!(:response) { webpay_stub(:tokens, :create, params: card_params) }
-      specify { expect(WebPay::Token.create(card: card_params).id).to eq response['id'] }
+      specify { expect(webpay.token.create(card: card_params).id).to eq response['id'] }
     end
 
     describe 'retrieve' do
       let(:id) { 'tok_xxxxxxxxx' }
       before { webpay_stub(:tokens, :retrieve, id: id) }
-      specify { expect(WebPay::Token.retrieve(id).id).to eq id }
+      specify { expect(webpay.token.retrieve(id).id).to eq id }
     end
   end
 
@@ -143,24 +137,24 @@ describe WebPay::Mock::WebMockWrapper do
     describe 'retrieve' do
       let(:id) { 'evt_xxxxxxxxx' }
       before { webpay_stub(:events, :retrieve, id: id) }
-      specify { expect(WebPay::Event.retrieve(id).id).to eq id }
+      specify { expect(webpay.event.retrieve(id).id).to eq id }
     end
 
     describe 'all' do
       before { webpay_stub(:events, :all) }
-      specify { expect(WebPay::Event.all.count).to eq 3 }
+      specify { expect(webpay.event.all.count).to eq 3 }
     end
   end
 
   describe 'account' do
     describe 'retrieve' do
       before { webpay_stub(:account, :retrieve) }
-      specify { expect(WebPay::Account.retrieve.id).to start_with 'acct_' }
+      specify { expect(webpay.account.retrieve.id).to start_with 'acct_' }
     end
 
     describe 'delete_data' do
       before { webpay_stub(:account, :delete_data) }
-      specify { expect(WebPay::Account.delete_data).to eq true }
+      specify { expect(webpay.account.delete_data.deleted).to eq true }
     end
   end
 end

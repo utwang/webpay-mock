@@ -38,10 +38,10 @@ In your spec file,
 let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
 let!(:response) { webpay_stub(:charges, :create, params: params) }
 
-specify { expect(WebPay::Charge.create(params).id).to eq response['id'] }
+specify { expect(webpay.charge.create(params).id).to eq response['id'] }
 ```
 
-See [our test cases](https://github.com/tomykaira/webpay-mock/blob/master/spec/webmock_wrapper_spec.rb) for more examples.
+See [our test cases](https://github.com/webpay/webpay-mock/blob/master/spec/webmock_wrapper_spec.rb) for more examples.
 
 ## Contributing
 

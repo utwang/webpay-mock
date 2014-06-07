@@ -1,6 +1,6 @@
 require "webpay/mock/version"
 
-module WebPay
+class WebPay
   module Mock
     # Your code goes here...
   end
