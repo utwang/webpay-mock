@@ -1,4 +1,4 @@
-# WebPay::Mock
+# WebPay::Mock [![Build Status](https://travis-ci.org/webpay/webpay-mock.svg)](https://travis-ci.org/webpay/webpay-mock)
 
 WebPay::Mock helps development of WebPay client applications.
 
