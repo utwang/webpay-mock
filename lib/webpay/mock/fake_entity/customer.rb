@@ -5,7 +5,7 @@ module WebPay::Mock::FakeEntity
     end
 
     def basic_attributes
-      { email: nil, description: nil, active_card: nil }
+      { email: nil, description: nil, active_card: nil, recursions: [] }
     end
 
     def copy_attributes

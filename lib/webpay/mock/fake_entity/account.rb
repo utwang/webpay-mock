@@ -5,7 +5,14 @@ module WebPay::Mock::FakeEntity
     end
 
     def basic_attributes
-      { statement_descriptor: nil, details_submitted: false, charge_enabled: false, currencies_supported: ["jpy"], email: 'test@example.com' }
+      {
+        charge_enabled: false,
+        currencies_supported: ["jpy"],
+        details_submitted: false,
+        email: 'test@example.com',
+        statement_descriptor: nil,
+        card_types_supported: ["Visa", "American Express", "MasterCard", "JCB", "Diners Club"],
+      }
     end
 
     def copy_attributes

@@ -10,8 +10,8 @@ module WebPay::Mock::FakeEntity
         currency: 'jpy',
         period: 'month',
         customer: 'cus_XXXXXXXXX',
-        last_executed: nil,
-        next_scheduled: Time.now.to_i,
+        last_executed: Time.now.to_i,
+        next_scheduled: Time.now.to_i + 30 * 24 * 60 * 60,
         status: 'active'
       }
     end
@@ -25,6 +25,7 @@ module WebPay::Mock::FakeEntity
       when 'first_scheduled'
         if value
           {
+            last_executed: nil,
             next_scheduled: value
           }
         end
