@@ -3,9 +3,13 @@ rvm:
   - 1.9.3
   - 2.1.2
   - jruby-head
+  - jruby-1.7
   - rbx-2.2.7
 script: "bundle exec rake"
 notifications:
   hipchat:
     rooms:
       secure: ykLsXlebzR9nnb+9ttpCySOg2hE4Ve699s2Owd7YahcZyVNxnG4q1P8Mps4jFlOgPNQ6JwkcB4A6QLavavtJlX7vXTDj1GD+zVAScjbtN/6ZV94S2eHA7hBUXHUwBmH0Cw5glrFoPEDBsQdOYbrOrJKwFNEhUTHdY0SRgEXv5Wo=
+matrix:
+  allow_failures:
+    - rvm: jruby-head # cryptic gemspec problem in f444c68

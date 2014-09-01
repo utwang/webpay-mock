@@ -5,7 +5,29 @@ module WebPay::Mock::FakeEntity
     end
 
     def basic_attributes
-      { amount: 1000, currency: 'jpy', amount_refunded: 0, paid: true, refunded: false, failure_message: nil, captured: true, expire_time: nil, card: fake_card }
+      {
+        amount: 1000,
+        card: fake_card,
+        currency: 'jpy',
+        paid: true,
+        captured: true,
+        refunded: false,
+        amount_refunded: 0,
+        customer: nil,
+        shop: nil,
+        recursion: nil,
+        description: nil,
+        failure_message: nil,
+        expire_time: nil,
+        fees: [{
+            object: 'fee',
+            transaction_type: 'payment',
+            transaction_fee: 0,
+            rate: 3.25,
+            amount: 33,
+            created: Time.now.to_i
+          }]
+      }
     end
 
     def copy_attributes

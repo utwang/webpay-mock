@@ -94,6 +94,10 @@ module WebPay::Mock::WebMockWrapper
         end
       end
 
+    unless path
+      raise ArgumentError.new("Unknown entity or action is given to webpay_stub()")
+    end
+
     if path.include?(':id')
       if id.nil? || id == ''
         raise ArgumentError.new(":id in parameters is required")
