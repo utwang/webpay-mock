@@ -43,6 +43,35 @@ specify { expect(webpay.charge.create(params).id).to eq response['id'] }
 
 See [our test cases](https://github.com/webpay/webpay-mock/blob/master/spec/webmock_wrapper_spec.rb) for more examples.
 
+### Testing error responses
+
+Just return an error by type.
+
+```ruby
+webpay_stub(:charges, :create, error: :card_error, params: params)
+```
+
+Error kinds are:
+
+- bad_request (400)
+- unauthorized (401)
+- card_error (402)
+- not_found (404)
+- internal_server_error (500)
+
+Specify all fields to test a specific error.
+
+```ruby
+webpay_stub(:charges, :create, params: params, response: card_error(
+    message: "You must provide the card which is not expired",
+    caused_by: "buyer",
+    param: "exp_month",
+    code: "invalid_expiry_month"
+    ))
+```
+
+For up-to-date details about error structure, see [API error document](http://lvh.me:3000/docs/api_errors) on our website.
+
 ## Contributing
 
 1. Fork it
