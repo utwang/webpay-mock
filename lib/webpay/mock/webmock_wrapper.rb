@@ -105,7 +105,7 @@ module WebPay::Mock::WebMockWrapper
       path = path.gsub(':id', id)
     end
 
-    spec =
+    spec = options[:response] ||
       case options[:error]
       when :bad_request
         bad_request
