@@ -18,10 +18,39 @@ describe WebPay::Mock::WebMockWrapper do
       specify { expect(webpay.charge.create(params).id).to eq response['id'] }
     end
 
+    describe 'create responds card error' do
+      let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
+      let!(:response) { webpay_stub(:charges, :create, error: :card_error, params: params) }
+
+      specify { expect { webpay.charge.create(params).id }.to raise_error(WebPay::ErrorResponse::CardError) }
+    end
+
+    describe 'create responds card error with specified cause' do
+      let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
+      let!(:response) { webpay_stub(:charges, :create, params: params, response: card_error(
+            message: "You must provide the card which is not expired",
+            caused_by: "buyer",
+            param: "exp_month",
+            code: "invalid_expiry_month"
+            )) }
+
+      specify { expect { webpay.charge.create(params).id }.to raise_error { |e|
+          expect(e.data.error.caused_by).to eq 'buyer'
+          expect(e.data.error.code).to eq 'invalid_expiry_month'
+        } }
+    end
+
     describe 'retrieve' do
       let(:id) { 'ch_xxxxxxxxx' }
       before { webpay_stub(:charges, :retrieve, id: id) }
       specify { expect(webpay.charge.retrieve(id).id).to eq id }
+    end
+
+    describe 'retrieve responds not found' do
+      let(:params) { { amount: 1000, currency: 'jpy', card: 'tok_xxxxxxxxx', description: 'test charge' } }
+      let!(:response) { webpay_stub(:charges, :create, error: :not_found, params: params) }
+
+      specify { expect { webpay.charge.create(params).id }.to raise_error(WebPay::ErrorResponse::InvalidRequestError) }
     end
 
     describe 'refund' do
