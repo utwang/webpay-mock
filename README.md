@@ -70,7 +70,7 @@ webpay_stub(:charges, :create, params: params, response: card_error(
     ))
 ```
 
-For up-to-date details about error structure, see [API error document](http://lvh.me:3000/docs/api_errors) on our website.
+For up-to-date details about error structure, see [API error document](https://webpay.jp/docs/api_errors) on our website.
 
 ## Contributing
 
