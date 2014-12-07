@@ -13,3 +13,4 @@ notifications:
 matrix:
   allow_failures:
     - rvm: jruby-head # cryptic gemspec problem in f444c68
+    - rvm: rbx-2.2.7
