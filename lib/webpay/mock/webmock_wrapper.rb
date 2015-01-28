@@ -57,6 +57,8 @@ module WebPay::Mock::WebMockWrapper
           [:delete, '/customers/:id', { 'id' => id, 'deleted' => true }]
         when :all
           [:get, '/customers', fake_list('/customers', lambda { customer_from({}, overrides) })]
+        when :delete_active_card
+          [:delete, '/customers/:id/active_card',customer_from({}, { id: id }.merge(overrides.merge(active_card: nil)))]
         end
       when :recursion, :recursions
         case action.to_sym

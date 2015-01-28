@@ -2,7 +2,6 @@ require "webpay/mock/version"
 
 class WebPay
   module Mock
-    # Your code goes here...
   end
 end
 
