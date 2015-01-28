@@ -69,7 +69,7 @@ describe WebPay::Mock::FakeEntity::Charge do
     subject(:charge) { charge_from(capture: false) }
 
     specify { expect(charge['captured']).to eq false }
-    specify { expect(charge['paid']).to eq false }
+    specify { expect(charge['paid']).to eq true }
     specify { expect(charge['expire_time']).to be_within(2).of(Time.now.to_i + 60 * 60 * 24 * 7) }
   end
 

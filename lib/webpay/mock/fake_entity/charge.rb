@@ -44,7 +44,7 @@ module WebPay::Mock::FakeEntity
         if value == false
           {
             captured:  false,
-            paid: false,
+            paid: true,
             expire_time: Time.now.to_i + 60 * 60 * 24 * 7
           }
         end
