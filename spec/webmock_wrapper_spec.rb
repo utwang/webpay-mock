@@ -106,6 +106,16 @@ describe WebPay::Mock::WebMockWrapper do
       before { webpay_stub(:customers, :all) }
       specify { expect(webpay.customer.all.count).to eq 3 }
     end
+
+    describe 'delete_active_card' do
+      let(:id) { 'cus_xxxxxxxxx' }
+      let!(:updated) { webpay_stub(:customers, :delete_active_card, id: id) }
+      specify do
+        response = webpay.customer.delete_active_card(id: id)
+        expect(response.id).to eq id
+        expect(response.active_card).to be_nil
+      end
+    end
   end
 
   describe 'recursios' do
