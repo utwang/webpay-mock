@@ -123,7 +123,7 @@ module WebPay::Mock::WebMockWrapper
         { body: response.to_json }
       end
 
-    stub_request(method, base_url + path).with(query: hash_including({})).with(params).to_return(spec)
+    stub_request(method, base_url + path).with(body: params).to_return(spec)
 
     JSON.parse(spec[:body])
   end

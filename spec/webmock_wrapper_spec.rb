@@ -56,7 +56,7 @@ describe WebPay::Mock::WebMockWrapper do
     describe 'refund' do
       let(:id) { 'ch_xxxxxxxxx' }
       let(:data) { charge_from({amount: 5000}, id: id) }
-      let!(:refunded) { webpay_stub(:charges, :refund, params: { 'amount' => data['amount'] }, base: data) }
+      let!(:refunded) { webpay_stub(:charges, :refund, params: {} , base: data) }
       specify { expect(webpay.charge.refund(id).refunded).to eq true }
     end
 
@@ -122,7 +122,7 @@ describe WebPay::Mock::WebMockWrapper do
     describe 'create' do
       let(:params) { { amount: 1000, currency: 'jpy', customer: 'cus_xxxxxxxxx', period: 'month', description: 'test charge' } }
       let!(:response) { webpay_stub(:recursion, :create, params: params) }
-      specify { expect(webpay.recursion.create({}).id).to eq response['id'] }
+      specify { expect(webpay.recursion.create(params).id).to eq response['id'] }
     end
 
     describe 'retrieve' do
@@ -161,7 +161,7 @@ describe WebPay::Mock::WebMockWrapper do
           :exp_year=>"2019",
           :cvc=>"123",
           :name=>"KIYOKI IPPYO"} }
-      let!(:response) { webpay_stub(:tokens, :create, params: card_params) }
+      let!(:response) { webpay_stub(:tokens, :create, params: {card: card_params}) }
       specify { expect(webpay.token.create(card: card_params).id).to eq response['id'] }
     end
 
